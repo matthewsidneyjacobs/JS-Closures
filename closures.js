@@ -109,9 +109,18 @@ the module pattern to achieve this. */
 function counterFactory(value) {
 
   // Code here.
+  var value = value;
 
 
   return {
+    inc: function() {
+      value++;
+      return value;
+    },
+    dec: function() {
+      value--;
+      return value;
+    }
   }
 }
 
@@ -120,7 +129,8 @@ counter = counterFactory(10);
 
 
 
-
+//you could now run counter.inc() // to get 11
+//and then counter.inc() againt to get 12
 
 
 
@@ -140,10 +150,12 @@ function motivation(firstname, lastname){
   var welcomeText = 'You\'re doing awesome, keep it up ';
 
   // code message function here.
-
+  function message() {
+    return welcomeText + firstname + ' ' + lastname +'.';
+  }
 
   //Uncommment this to return the value of your invoked message function
-  //return message();
+  return message();
 
 }
 
@@ -183,12 +195,15 @@ var module = (function() {
 
   return {
     // Code here.
+    publicMethod: function() {
+      return privateMethod();
+    }
   };
 
 })();
 
 // Uncomment this after you create your public method
-//   module.publicMethod();
+   module.publicMethod();
 
 
 
@@ -211,9 +226,10 @@ then 3, etc). Run this code in your console to see what the output is. */
 // To make this code work you will need to create a new scope for every iteration.
 function timeOutCounter() {
   for (var i = 0; i <= 5; i++) {
+    (function(x) {
     setTimeout(function() {
-      console.log(i);
-    }, i * 1000)
+      console.log(x);
+    }, i * 1000)})(i);
   }
 
   function newScope(i) {
@@ -223,6 +239,7 @@ function timeOutCounter() {
 timeOutCounter();
 
 
+//used an iife to get settime to snapshot each iteration of the for loop; that seems to help
 
 
 
@@ -233,6 +250,11 @@ timeOutCounter();
 
 var funcArray = [];
 
+for (var i = 0; i < 6; i++) {
+  funcArray[i] = (function(i) { return function(){return i}})(i)
+}
+
+// used iife inside of an iife to set the index as a function and immediately call the value of the for loop??
 /*
   Make the following code work
 
